@@ -4,17 +4,17 @@ faceiraq.org 멀티 섹션 크롤러
 정치, 안보, 경제 섹션을 모두 수집하는 스크립트
 
 사용법:
-    python3 faceiraq_multi_crawler.py [--hours HOURS] [--sections SECTIONS]
+    python3 faceiraq_multi_crawler2.py [--hours HOURS] [--sections SECTIONS]
     
 예시:
     # 모든 섹션 수집 (기본)
-    python3 faceiraq_multi_crawler.py
+    python3 faceiraq_multi_crawler2.py
     
     # 특정 섹션만 수집
-    python3 faceiraq_multi_crawler.py --sections politics,security
+    python3 faceiraq_multi_crawler2.py --sections politics,security
     
     # 48시간 범위로 수집
-    python3 faceiraq_multi_crawler.py --hours 48
+    python3 faceiraq_multi_crawler2.py --hours 48
     
 출력:
     faceiraq_politics_YYYYMMDD_HHMMSS.json/csv
@@ -28,7 +28,8 @@ import re
 import argparse
 from datetime import datetime, timedelta
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from bs4 import BeautifulSoup
 import csv
 
@@ -76,7 +77,8 @@ class FaceIraqMultiCrawler:
         chrome_options.add_argument('--lang=ar')
         chrome_options.add_argument('--window-size=1920,1080')
         
-        self.driver = webdriver.Chrome(options=chrome_options)
+        service = Service(ChromeDriverManager().install())
+        self.driver = webdriver.Chrome(service=service, options=chrome_options)
         
         # 섹션별 결과 저장
         self.results = {}
